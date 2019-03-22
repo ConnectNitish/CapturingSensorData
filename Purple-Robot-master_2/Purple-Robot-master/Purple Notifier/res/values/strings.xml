@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">Purple Notifier</string>
+
+    <string name="title_widget_identifiers">Widgets</string>
+    <string name="menu_add_identifier_label">Add New Identifier</string>
+    <string name="menu_download_label">Download Labels</string>
+    <string name="menu_update_label">Update Widgets</string>
+    
+    <string name="menu_remove_label">Remove Identifier</string>
+    <!--  <string name="menu_update_label">Update Widget</string> -->
+    
+    <string name="prompt_new_identifier">Add Identifier</string>
+    <string name="message_new_identifier">Please add a new unique identifier.</string>
+    <string name="prompt_remove_identifier">Remove Identifier?</string>
+    <string name="message_remove_identifier" formatted="false">Remove "%s" from the list of identifiers?</string>
+
+    <string name="prompt_id_resource">Fetch &amp; Replace Identifiers</string>
+    <string name="message_id_resource">Please enter a URL to a plain text resource containing one identifier per line.</string>
+    
+    <string name="button_add">Add</string>
+    <string name="button_remove">Remove</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_fetch">Fetch</string>
+    
+    <string name="default_url">http://mohrlab.northwestern.edu/identifiers.txt</string>
+
+    <string name="error_fetch_exception">Error fetching identifiers. Please check your URL and try again.</string>
+    <string name="error_unknown_exception">Unknown error encountered. Please try again later.</string>
+    
+    <string name="widget_title_placeholder">(Widget Title)</string>
+    <string name="widget_message_placeholder">(Widget Message)</string>
+    
+    <string name="basic_widget_title">Purple: Image, Title &amp; Message</string>
+    <string name="text_widget_title">Purple: Title &amp; Message</string>
+    <string name="image_widget_title">Purple: Image Only</string>
+    <string name="title_widget_title">Purple: Title Only</string>
+    <string name="five_widget_title">Purple: Five Buttons</string>
+    <string name="four_widget_title">Purple: Four Buttons</string>
+    <string name="badge_widget_title">Purple: Badge, Title &amp; Message</string>
+    <string name="small_badge_widget_title">Purple: Badge &amp; Title</string>
+    
+    <string name="config_settings_category">Widget Settings</string>
+    <string name="config_password_label">Settings Password</string>
+    <string name="config_password_title">Settings Password</string>
+    <string name="config_password_message">Set a password to lock widget settings.</string>
+
+    <string name="config_title_label">Title Text</string>
+    <string name="config_title_title">Title Text</string>
+    <string name="config_title_message">Set the widget title.</string>
+
+    <string name="config_message_label">Message Text</string>
+    <string name="config_message_title">Message Text</string>
+    <string name="config_message_message">Set the widget message.</string>
+
+    <string name="config_image_label">Set Image</string>
+    <string name="config_image_title">Set Image</string>
+    <string name="config_image_message">Enter the URI of the image to use.</string>
+
+    <string name="config_color_title">Badge Text Color</string>
+    
+    <string name="config_image_one_label">Button #1</string>
+    <string name="config_image_two_label">Button #2</string>
+    <string name="config_image_three_label">Button #3</string>
+    <string name="config_image_four_label">Button #4</string>
+    <string name="config_image_five_label">Button #5</string>
+
+    <string name="config_badge_label">Badge Text</string>
+    <string name="config_badge_title">Badge Text</string>
+    <string name="config_badge_message">Set text to be overlaid on the badge.</string>
+    
+    <string name="config_identifiers_label">Widget Identifier</string>
+    <string name="config_identifiers_title">Select Widget Identifier</string>
+    <string name="config_identifiers_message">Choose the identifier to assign to the new widget.</string>
+</resources>

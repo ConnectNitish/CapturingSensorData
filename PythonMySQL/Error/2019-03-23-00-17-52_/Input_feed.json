@@ -1,0 +1,1 @@
+{"Operation":"SubmitProbes","Payload":"[{\"CALL_STATE\":\"Idle\",\"TIMESTAMP\":1553280455,\"GUID\":\"381a7071-ef5f-4f39-9024-4e3862329ebf\",\"PROBE_TRANSMIT_MODE\":0,\"PROBE\":\"edu.northwestern.cbits.purple_robot_manager.probes.builtin.CallStateProbe\"}]","UserHash":"b50f1867e01b21d3134b0097ecb7990d","Checksum":"3644b535ff1a4d7dac18ba6cf2f1f447","ContentLength":244}
