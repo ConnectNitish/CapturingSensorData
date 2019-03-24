@@ -1,0 +1,232 @@
+select * from callstate;
+select * from location;
+select * from sunrisesunsetfeature;
+select * from wifiaccesspoints;
+select * from wakelockinformation;
+select * from network;
+select * from datecalendar;
+select * from battery;
+
+
+truncate table callstate;
+truncate table location;
+truncate table sunrisesunsetfeature;
+truncate table wifiaccesspoints;
+truncate table wakelockinformation;
+truncate table network;
+truncate table datecalendar;
+truncate table battery;
+
+drop table callstate;
+create table callstate (id serial primary key,userhash text,call_state text,timestamp text,probe_transmit_mode text);
+
+drop table battery;
+create table battery (id serial primary key,userhash text,icon_small text,invalid_charger text,level text,health text,scale text,priority text,technology text, charge_counter text,max_charging_current text,probe_transmit_mode text,voltage text,timestamp text,temperature text,max_charging_voltage text,present text,battery_low text,plugged text,seq text,status text);
+
+drop table datecalendar;
+create table datecalendar (id serial primary key,userhash text,day_of_year text,month text,dst_offset text,day_of_month text,week_of_month text,probe_transmit_mode text,day_of_week_in_month text,week_of_year text,hour_of_day text,timestamp text,minute text,day_of_week text);
+
+drop table network;
+create table network (id serial primary key,userhash text,interface_name text, interface_display text, hostname text, timestamp text, ip_address text,probe_transmit_mode text);
+
+drop table wakelockinformation;
+create table wakelockinformation (id serial primary key,userhash text,bright_count text,dim_locks text, partial_count text,timestamp text, full_locks text, bright_locks text, partial_locks text, dim_count text, probe_transmit_mode text , full_count text);
+
+drop table wifiaccesspoints;
+create table wifiaccesspoints (id serial primary key,userhash text,current_rssi text, timestamp text, current_bssid text,access_point_count text,probe_transmit_mode text,current_link_speed text, current_ssid text);
+
+drop table sunrisesunsetfeature;
+create table sunrisesunsetfeature (id serial primary key,userhash text,sunset text, timestamp text, longitude text,sunrise text,is_day text,sunrise_distance text,sunset_distance text,probe_transmit_mode text, latitude text,day_duration text);
+
+drop table location; 
+create table location (id serial primary key,userhash text,time_fix text, longitude text,altitude text,probe_transmit_mode text, accuracy text, gps_available text,speed text,timestamp text, provider text,network_available text,bearing text,latitude text);
+
+-----------------------------
+
+drop table battery
+create table battery (id serial primary key,userhash text,icon_small text,invalid_charger text,level text,health text,scale text,priority text,technology text, charge_counter text,max_charging_current text,probe_transmit_mode text,voltage text,timestamp text,temperature text,max_charging_voltage text,present text,battery_low text,plugged text,seq text,status text);
+
+BatteryProbe 
+--------------
+
+
+									    ('icon-small',
+                                                                              17303465),
+									    ('invalid_charger',
+                                                                              0),
+									    ('level',
+                                                                              100),
+                                                                             
+                                                                             ('health',
+                                                                              2),
+                                                                             ('scale',
+                                                                              100),
+                                                                             ('PRIORITY',
+                                                                              False),
+                                                                             ('technology',
+                                                                              'Li-ion'),
+                                                                             ('charge_counter',
+                                                                              10000),
+                                                                             ('max_charging_current',
+                                                                              5000000),
+                                                                             ('PROBE_TRANSMIT_MODE',
+                                                                              0),
+                                                                             ('voltage',
+                                                                              5000),
+                                                                             ('TIMESTAMP',
+                                                                              1551905960),
+                                                                             ('temperature',
+                                                                              250),
+                                                                             ('max_charging_voltage',
+                                                                              5000000),
+                                                                             ('present',
+                                                                              True),
+                                                                             ('battery_low',
+                                                                              False),
+                                                                             ('plugged',
+                                                                              1),
+                                                                             ('seq',
+                                                                              3),
+                                                                             ('status',
+                                                                              2)
+
+
+drop table callstate
+create table callstate (id serial primary key,userhash text,call_state text,timestamp text,probe_transmit_mode text);
+
+CallStateProbe': [						 	       ('CALL_STATE',
+                                                                                'Idle'),
+                                                                               ('TIMESTAMP',
+                                                                                1551906021),
+                                                                               ('PROBE_TRANSMIT_MODE',
+                                                                                0)],
+
+
+
+
+create table datecalendar (id serial primary key,userhash text,day_of_year text,month text,dst_offset text,day_of_month text,week_of_month text,probe_transmit_mode text,day_of_week_in_month text,week_of_year text,hour_of_day text,timestamp text,minute text,day_of_week text);
+DateCalendarProbe': [							         ('DAY_OF_YEAR',
+                                                                                   66),
+                                                                                  ('MONTH',
+                                                                                   3),
+                                                                                  ('DST_OFFSET',
+                                                                                   0),
+                                                                                  ('DAY_OF_MONTH',
+                                                                                   7),
+                                                                                  ('WEEK_OF_MONTH',
+                                                                                   2),
+                                                                                  ('PROBE_TRANSMIT_MODE',
+                                                                                   0),
+                                                                                  ('DAY_OF_WEEK_IN_MONTH',
+                                                                                   1),
+                                                                                  ('WEEK_OF_YEAR',
+                                                                                   10),
+                                                                                  ('HOUR_OF_DAY',
+                                                                                   2),
+                                                                                  ('TIMESTAMP',
+                                                                                   1551905960),
+                                                                                  ('MINUTE',
+                                                                                   29),
+                                                                                  ('DAY_OF_WEEK',
+                                                                                   5)],
+
+
+
+
+
+create table network (id serial primary key,userhash text,interface_name text, interface_display text, hostname text, timestamp text, ip_address text,probe_transmit_mode text);
+
+NetworkProbe': [							     ('INTERFACE_NAME',
+                                                                              'wlan0'),
+                                                                             ('INTERFACE_DISPLAY',
+                                                                              'wlan0'),
+                                                                             ('HOSTNAME',
+                                                                              '192.168.232.2'),
+                                                                             ('TIMESTAMP',
+                                                                              1551905960),
+                                                                             ('IP_ADDRESS',
+                                                                              '192.168.232.2'),
+                                                                             ('PROBE_TRANSMIT_MODE',
+                                                                              0)],
+
+
+
+
+
+
+
+
+create table wakelockinformation (id serial primary key,userhash text,bright_count text,dim_locks text, partial_count text,timestamp text, full_locks text, bright_locks text, partial_locks text, dim_count text, probe_transmit_mode text , full_count text);
+
+WakeLockInformationProbe': [								('BRIGHT_COUNT',
+                                                                                          0),
+                                                                                         ('DIM_LOCKS',
+                                                                                          []),
+                                                                                         ('PARTIAL_COUNT',
+                                                                                          0),
+                                                                                         ('TIMESTAMP',
+                                                                                          1551905960),
+                                                                                         ('FULL_LOCKS',
+                                                                                          []),
+                                                                                         ('BRIGHT_LOCKS',
+                                                                                          []),
+                                                                                         ('PARTIAL_LOCKS',
+                                                                                          []),
+                                                                                         ('DIM_COUNT',
+                                                                                          0),
+                                                                                         ('PROBE_TRANSMIT_MODE',
+                                                                                          0),
+                                                                                         ('FULL_COUNT',
+                                                                                          0)]}
+
+
+
+create table wifiaccesspoints (id serial primary key,userhash text,current_rssi text, timestamp text, current_bssid text,access_point_count text,probe_transmit_mode text,current_link_speed text, current_ssid text);
+
+
+'WifiAccessPointsProbe': [('CURRENT_RSSI', -50),
+                           ('ACCESS_POINTS',
+                            [{'BSSID': '02:15:b2:00:01:00',
+                              'CAPABILITIES': '[ESS]',
+                              'FREQUENCY': 2447,
+                              'LEVEL': -50,
+                              'SSID': 'AndroidWifi'}]),
+                           ('TIMESTAMP', 1553155450),
+                           ('GUID', '38cbe8eb-5fff-4c72-af2a-d6fd1a81eb69'),
+                           ('CURRENT_BSSID', '02:15:b2:00:01:00'),
+                           ('ACCESS_POINT_COUNT', 1),
+                           ('PROBE_TRANSMIT_MODE', 0),
+                           ('CURRENT_LINK_SPEED', 13),
+                           ('CURRENT_SSID', '"AndroidWifi"')]}
+
+
+create table sunrisesunsetfeature (id serial primary key,userhash text,sunset text, timestamp text, longitude text,sunrise text,is_day text,sunrise_distance text,probe_transmit_mode text, latitude text,day_duration text);
+
+SunriseSunsetFeature': [('SUNSET', 1553134620705),
+                          ('TIMESTAMP', 1553155446),
+                          ('LONGITUDE', -122.08400000000002),
+                          ('SUNRISE', 1553174100705),
+                          ('IS_DAY', False),
+                          ('SUNRISE_DISTANCE', -18654000),
+                          ('GUID', '3fd31004-90af-4135-ab4f-0eba85737d21'),
+                          ('SUNSET_DISTANCE', 20826000),
+                          ('PROBE_TRANSMIT_MODE', 0),
+                          ('LATITUDE', 37.421998333333335),
+                          ('DAY_DURATION', -39480000)],
+
+create table location (id serial primary key,userhash text,time_fix text, longitude text,altitude text,probe_transmit_mode text, accuracy text, gps_available text,speed text,timestamp text, provider text,network_available text,bearing text,latitude text);
+
+'LocationProbe': [('TIME_FIX', 1553175553000),
+                   ('LONGITUDE', -122.08400000000002),
+                   ('GUID', '861de468-6694-485a-82a8-c73b454aa836'),
+                   ('ALTITUDE', 5),
+                   ('PROBE_TRANSMIT_MODE', 0),
+                   ('ACCURACY', 20),
+                   ('GPS_AVAILABLE', True),
+                   ('SPEED', 0),
+                   ('TIMESTAMP', 1553175823),
+                   ('PROVIDER', 'gps'),
+                   ('NETWORK_AVAILABLE', False),
+                   ('BEARING', 0),
+                   ('LATITUDE', 37.421998333333335)],
+

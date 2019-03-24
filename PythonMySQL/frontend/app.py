@@ -13,15 +13,43 @@ app = Flask(__name__)
 # global max_size
 max_size = 20
 # days
-days = 2
+days = 5
 
 @app.route("/")
 def index():
-    return render_template("index.html")
 
-# @app.route("/retrieve_data")
-# def retrieve_data():
+    bLayerObj = bl.BusinessLayer()
 
+    networkInfo = bLayerObj.getNetworkDetailsForPresentation()
+    wifi= bLayerObj.getWifiDataForPresentation()
+
+    info = {
+        "networkInfo":networkInfo,
+        "wifi":wifi
+    }
+
+    return render_template("home.html",info = info)
+
+@app.route('/navigate_to_user/<user_hash>', methods=['GET', 'POST']) 
+def navigate_to_user(user_hash):
+    return render_template("index.html", user_hash = user_hash)
+
+
+@app.route("/retrieve_data", methods=['GET', 'POST'])
+def retrieve_data():
+
+    bLayerObj = bl.BusinessLayer()
+
+    latitude_temp,longitude_temp,threshold_value = [17.445437,78.3456945,0.0035]
+
+    active_user_data = bLayerObj.getBatteryInfoForAllUser()
+    location_based_user_data = bLayerObj.getBatteryInfoForAllUserAsPerLocation(latitude_temp,longitude_temp,threshold_value)
+
+    print(location_based_user_data)
+
+    data_dict = {"active_user_data" : active_user_data,"location_based_user_data":location_based_user_data}
+
+    return jsonify(data_dict)
     
 
 @app.route('/retrieve_user_data/<user_hash>', methods=['GET', 'POST']) 
@@ -54,25 +82,20 @@ def retrieve_user_data(user_hash):
     battery_level = battery_probe_data["level"]
     battery_timestamp = battery_probe_data["timestamp"]
 
-    
-
-    # elif probe == "NetworkProbe":
 
     net_probe_data = bLayerObj.get_wifi_details_for_user(user_hash,days)
 
     net_speed = net_probe_data["speed"]     
     net_speed_timestamp = net_probe_data["timestamp"]
 
-    # elif probe == "callstate":
-    #
+    
     call_state_data_probe = bLayerObj.get_callstate_details_for_user(user_hash,days)
 
     call_state_count_list[2] = call_state_data_probe["ringing"]
     call_state_count_list[1] = call_state_data_probe["off-hook"]
     call_state_count_list[0] = call_state_data_probe["idle"]
         
-    # elif probe == "location":
-        
+    
     location_data_probe = bLayerObj.get_location_details_for_user(user_hash,days)
     
     gps_timestamp = location_data_probe["timestamp"]

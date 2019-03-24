@@ -355,16 +355,18 @@ order by userhash """)
         # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
         self.my_cursor.execute("""SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery,(select userhash,count(distinct level) as countlevel from (SELECT * FROM battery WHERE timestamp >= """ + "'"+ str(dt) +"'"+ """) B group by userhash order by countlevel desc limit 3) AA WHERE AA.userhash = battery.userhash AND battery.timestamp >= """ + "'" + str(dt) + "'" + """ ORDER BY battery.userhash,battery.timestamp """)
         rows = self.my_cursor.fetchall()
-        #print(rows)
+        print(len(rows))
         data_final = {}
 
-        level_value_for_user = []
-        level_value_for_timestamp = []
+
         
 
         for r in rows:
 
             if len(r)>=3 :
+
+                level_value_for_user = []
+                level_value_for_timestamp = []
 
                 userhash_temp = r[0]
                 level_temp = r[1]
@@ -391,16 +393,18 @@ order by userhash """)
         # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
         self.my_cursor.execute(""" SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery where userhash IN (select userhash from location where longitude <= cast (""" + str(longitude_temp + threshold_value) + """ as text) AND longitude >= cast( """ + str(longitude_temp - threshold_value) + """ as text) AND latitude <= cast ( """ + str(latitude_temp + threshold_value) + """ as text) AND latitude >= cast( """ + str(latitude_temp - threshold_value) + """ as text) AND timestamp >= """ + "'" + str(dt) + "'" + """ ) AND battery.timestamp >= """ + "'" + str(dt) + "'")
         rows = self.my_cursor.fetchall()
-        print(rows)
+        # print(rows)
         data_final = {}
 
-        level_value_for_user = []
-        level_value_for_timestamp = []
+
         
 
         for r in rows:
 
             if len(r)>=3 :
+
+                level_value_for_user = []
+                level_value_for_timestamp = []
 
                 userhash_temp = r[0]
                 level_temp = r[1]
@@ -429,7 +433,8 @@ order by userhash """)
 if __name__ == "__main__":
     print("AAAAA")
     dbInstance = Database("127.0.0.1",'python_mysql','postgres','test')
-    print(dbInstance.getWifiDataForPresentation())
-    # print(dbInstance.getBatteryInforForAllUsersAsPerLocation(17.445437,78.3456945,0.0035))
+    # print(dbInstance.getWifiDataForPresentation())
+    # print(dbInstance.getBatteryInforForAllUsers())
+    print(dbInstance.getBatteryInforForAllUsersAsPerLocation(17.445437,78.3456945,0.0035))
 	# InvokeDBFunc()
     # print(dbInstance.probe_info())

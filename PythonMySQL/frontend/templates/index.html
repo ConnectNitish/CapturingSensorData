@@ -29,6 +29,8 @@
     </style>
 </head>
 
+{% extends "layout.html" %}
+{% block content %}
 <body>
 <section class="section">
     <div class="container">
@@ -54,21 +56,13 @@
             <div id="gps" class="chart"></div>
         </div>
     </div>
-
-
 </section>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
 
     <script type="text/javascript">
     
 
         function visulaization(){
-            $.post('{{ url_for("retrieve_user_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
+            $.post('{{ url_for("retrieve_user_data", user_hash="{{user_hash}}")}}', {
             
             }).done(function(response) {
                 
@@ -182,9 +176,8 @@
 
     </script>
 </body>
+{% endblock %}
 
-
-</html>
 
 
 

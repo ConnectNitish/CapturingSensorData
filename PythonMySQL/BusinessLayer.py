@@ -31,6 +31,7 @@ class BusinessLayer:
 		x = self.connection.getBatteryInforForAllUsers()
 		#print(x)
 		self.connection.close_conn_cursor()
+		self.connection = None
 		return x
 	
 	def getBatteryInfoForAllUserAsPerLocation(self,latitude_temp,longitude_temp,threshold_value):
@@ -38,6 +39,7 @@ class BusinessLayer:
 		x = self.connection.getBatteryInforForAllUsersAsPerLocation(latitude_temp,longitude_temp,threshold_value)
 		#print(x)
 		self.connection.close_conn_cursor()
+		self.connection = None
 		return x
 
 	def getAllUserHash(self):
@@ -100,10 +102,10 @@ class BusinessLayer:
 if __name__ == "__main__":
 	bobj = BusinessLayer()
 	# print(bobj.getProbeInfo('34237272481aa6a02ea94799695a6982'))	
-	# print(bobj.getBatteryInfoForAllUser())
+	print(bobj.getBatteryInfoForAllUser())
 	# print(bobj.getWifiDataForPresentation())
 	# print(bobj.getNetworkDetailsForPresentation())
 	# print(bobj.get_wifi_details_for_user('34237272481aa6a02ea94799695a6982'))
-	print(bobj.get_battery_details_for_user('34237272481aa6a02ea94799695a6982'))
-	# print(bobj.get_callstate_details_for_user('34237272481aa6a02ea94799695a6982',2))
-	# print(bobj.get_location_details_for_user('34237272481aa6a02ea94799695a6982'))
+	# print(bobj.get_battery_details_for_user('34237272481aa6a02ea94799695a6982'))
+	# # print(bobj.get_callstate_details_for_user('34237272481aa6a02ea94799695a6982',2))
+	# # print(bobj.get_location_details_for_user('34237272481aa6a02ea94799695a6982'))
