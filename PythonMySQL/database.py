@@ -24,9 +24,9 @@ class Database:
         uids = {}
         for r in x1:
             dt_object = datetime.fromtimestamp(int(r[2]))
-	    dt_object = r[2]
+            # dt_object = r[2]
             uids[r[0]] = [r[1],str(dt_object)]
-            # print(r[0])
+        # print(r[0])
         ret_dict["battery"]=uids
         # print(uids)
         # print("----------------------------")

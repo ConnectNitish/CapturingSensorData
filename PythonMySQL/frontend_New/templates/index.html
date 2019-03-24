@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +28,8 @@
         }
     </style>
 </head>
+{% extends "home.html" %}
+{% block content %}
 <body>
 <section class="section">
     <div class="container">
@@ -44,127 +47,144 @@
             
         </div>
         <div class="column">
+                <h5 class="title is-6">Network Speed of User</h5>
+                <div id="network_speed" class="chart"></div>
+        </div>
+        <div class="column">
             <h5 class="title is-6">Location Tracking</h5>
             <div id="gps" class="chart"></div>
         </div>
     </div>
+
+
 </section>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <!-- <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script> -->
-    <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
     <script type="text/javascript">
-  
+    
 
-    //   Pusher.logToConsole = true;
+        function visulaization(){
+            $.post('{{ url_for("retrieve_user_data", user_hash={{user_hash}})}}', {
+            
+            }).done(function(response) {
+                
+                console.log(response)
 
-      const pusher = new Pusher('00bd2d16b44796f46ee2', {
-        cluster: 'ap2', // gotten from Pusher app dashboard
-      });
-      // subscribe to crypto channel
-      const channel = pusher.subscribe('my-channel')
-      // listen for relevant events
+                //Start battery data processing
+                var battery_layout = {
+                    title: 'Battery Level',
+                    xaxis: {
+                      title: 'Time',
+                      showgrid: false,
+                      zeroline: false
+                    },
+                    yaxis: {
+                      title: 'Level',
+                      showline: false
+                    }
+                  };
 
-      // Plotly.newPlot(graphDiv, data, layout, config)
-      var battery_layout = {
-        title: 'Battery Level',
-        xaxis: {
-          title: 'Time',
-          showgrid: false,
-          zeroline: false
-        },
-        yaxis: {
-          title: 'Level',
-          showline: false
+                var battery_data = {
+                  x: response['battery_timestamp'],
+                  y: response['battery_level']
+                };
+
+                var battery_data_list = [battery_data];
+
+                Plotly.newPlot('battery',battery_data_list,battery_layout);
+                //End battery data processing
+
+
+                //Start Call State data processing
+                var call_state_data = [{
+                  values: response['call_state_count_list'],
+                  labels: response['call_state_list'],
+                  type: 'pie'
+                }];
+
+                var call_state_layout = {
+                  height: 400,
+                  width: 500
+                };
+
+                Plotly.newPlot('call_state', call_state_data, call_state_layout);
+                //End Call State data processing
+
+                //Start network speed data processing
+                var net_speed_layout = {
+                    title: 'Network Speed',
+                    xaxis: {
+                      title: 'Time',
+                      showgrid: false,
+                      zeroline: false
+                    },
+                    yaxis: {
+                      title: 'Speed',
+                      showline: false
+                    }
+                  };
+
+                var battery_data = {
+                  x: response['net_speed_timestamp'],
+                  y: response['net_speed']
+                };
+
+                var battery_data_list = [battery_data];
+
+                Plotly.newPlot('battery',battery_data_list,battery_layout);
+                //End network speed data processing
+
+                //Start gps data processing
+                var gps_data = [{
+                    type:'scattermapbox',
+                    lon:response['location_longitude'],
+                    lat:response['location_latitude'],
+                    mode:'markers',
+                    marker: {
+                        size:14
+                    },
+                }]
+
+                var gps_layout = {
+                autosize: true,
+                hovermode:'closest',
+                mapbox: {
+                    bearing:0,
+                    center: {
+                    lat:17.3850,
+                    lon:78.4867
+                    },
+                    pitch:0,
+                    zoom:6
+                },
+                }
+
+
+                Plotly.setPlotConfig({
+                    mapboxAccessToken: 'pk.eyJ1Ijoibml0aXNoMTIzIiwiYSI6ImNqdGtieXV0NjEyMmQ0NGxxNmo3c2M5bzcifQ.OBC2T25mrxqvbvrd5Hv-dg'
+                })
+                    
+                Plotly.newPlot('gps', gps_data, gps_layout);
+                //End gps data processing
+
+            }).fail(function() {
+                console.log("something went wrong with the request");
+            });
         }
-      };
 
-      
-      channel.bind('my-event', data => {
+        $(document).ready(function(){
+            setInterval("visulaization()", 10000);
+        });
 
-          const battery = JSON.parse(data.battery);
-          Plotly.newPlot('battery', battery,battery_layout);
-            console.log(data)
-          // const bar_chart = JSON.parse(data.bar_chart);
-          // Plotly.newPlot('market_cap_chart', bar_chart);
-
-        //   const gps = JSON.parse(data.gps);
-        //   Plotly.newPlot('gps', gps, gps_layout);
-
-          const call_state = JSON.parse(data.call_state);
-          Plotly.newPlot('call_state', call_state);
-          
-        //working
-        // var gps = [{
-        //         type:'scattermapbox',
-        //         lon:['78.3457576'],
-        //         lat:['17.4454146'],
-        //         mode:'markers',
-        //         marker: {
-        //             size:14
-        //         },
-        //         text:['Hyderabad']
-        //     }]
-
-
-        //   var gps = [{
-        //     type:'scattermapbox',
-        //     lon: data.longitude,
-        //     lat: data.latitude,
-        //     mode: 'markers',
-        //     text:data.place,
-        //     marker: {
-        //         size: 7,
-        //         text:data.place,
-        //         opacity : 0.8,
-        //         reversescale : true,
-        //         autocolorscale : false,
-        //         symbol : 'square',
-        //         line : {
-        //             width:1,
-        //             color:'rgba(102, 102, 102)'
-        //         }
-        //     },
-        //     }]
-
-        var gps = [{
-                type:'scattermapbox',
-                lon:JSON.parse(data.longitude),
-                lat:JSON.parse(data.latitude),
-                mode:'markers',
-                marker: {
-                    size:14
-                },
-                // text:JSON.parse(data.place)
-            }]
-
-            var gps_layout = {
-            autosize: true,
-            hovermode:'closest',
-            mapbox: {
-                bearing:0,
-                center: {
-                lat:17.3850,
-                lon:78.4867
-                },
-                pitch:0,
-                zoom:6
-            },
-            }
-
-
-            Plotly.setPlotConfig({
-                mapboxAccessToken: 'pk.eyJ1Ijoibml0aXNoMTIzIiwiYSI6ImNqdGtieXV0NjEyMmQ0NGxxNmo3c2M5bzcifQ.OBC2T25mrxqvbvrd5Hv-dg'
-            })
-
-            Plotly.newPlot('gps', gps, gps_layout);
-
-      });
     </script>
 </body>
+
+{% endblock %}
 </html>
 
 

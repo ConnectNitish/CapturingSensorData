@@ -1,0 +1,63 @@
+{% extends "home.html" %}
+
+
+{% block content %}
+
+<div class="container">
+  <h2>Network Information</h2>
+  <p>It shows the various information regarding network of User</p>            
+  <table class="table">
+    <thead>
+      <tr>
+        <th>UserHash</th>
+        <th>Hostname</th>
+        <th>IP Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for use in networkInfo.keys() %}
+      <tr>
+        <td>{{ use }}</td>
+        <td>{{ networkInfo[use][0] }}</td>
+        <td>{{ networkInfo[use][1] }}</td>
+      </tr>
+    {% endfor %}
+     
+    </tbody>
+  </table>
+
+
+</div>
+
+
+
+<div class="container">
+  <h2>Wifi Information</h2>
+  <p>It shows the various wifi regarding network of User</p>            
+  <div class="wifi_table">  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>UserHash</th>
+          <th>Link_Speed</th>
+          <th>Access_Point_Count</th>
+          <th>BSSID</th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for use in wifi.keys() %}
+        <tr>
+          <td>{{ use }}</td>
+          <td>{{ wifi[use][0] }}</td>
+          <td>{{ wifi[use][1] }}</td>
+          <td>{{ wifi[use][2] }}</td>
+        </tr>
+      {% endfor %}
+       
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+
+{% endblock %}

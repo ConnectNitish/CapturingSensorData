@@ -49,7 +49,7 @@ select distinct userhash from callstate;
 
 -- update battery set level = 60,timestamp='1551905360' where userhash = '34237272481aa6a02ea94799695a6982'
 
-"1551905360"
+-- "1551905360"
 
 
 -- truncate table network;

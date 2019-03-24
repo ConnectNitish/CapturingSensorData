@@ -1,0 +1,85 @@
+
+        function translate(sourceElem, destElem, sourceLang, destLang) {
+            $(destElem).html('<img src="{{ url_for('static', filename='loading.gif') }}">');
+            $.post('/translate', {
+                text: $(sourceElem).text(),
+                source_language: sourceLang,
+                dest_language: destLang
+            }).done(function(response) {
+                $(destElem).text(response['text'])
+            }).fail(function() {
+                $(destElem).text("{{ _('Error: Could not contact server.') }}");
+            });
+        }
+
+
+        function request(){
+            if(response == true){
+                // This makes it unable to send a new request 
+                // unless you get response from last request
+                response = false;
+                var req = $.ajax({
+                    type:"post",
+                    url:"request-handler.php",
+                    data:{data:"Hello World"}
+                });
+
+                req.done(function(){
+                    console.log("Request successful!");
+
+                    // This makes it able to send new request on the next interval
+                    response = true;
+                });
+            }
+
+            setTimeout(request(),1000);
+        }
+
+        request();
+
+
+        function test(){
+            $.post('/retrieve_data', {
+            }).done(function(response) {
+                
+                console.log(response)
+
+                var data = {
+                  x: response['text'],
+                  y: response['text']
+                };
+
+                var data_list = [data];
+
+                Plotly.newPlot('battery',data_list);
+
+            }).fail(function() {
+                
+            });
+        }
+
+        $(document).ready(function(){
+            setInterval("test()", 1000);
+        });
+
+
+
+        $.ajax({
+            type : "POST",
+            url : "{{ url_for('mod.load_ajax') }}",
+            data: {json_str: JSON.stringify(data)},
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                console.log(result);
+            }
+        });
+
+    @mod.route('/load_ajax', methods=["GET", "POST"])
+    def load_ajax():
+        if request.method == "POST":
+            # load _sid and _uip from posted JSON and save other data
+            # but request.form is empty.
+            # >>> request.form
+            # ImmutableMultiDict([]) 
+            return str(request.form['json_str']
+     )
