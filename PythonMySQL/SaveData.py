@@ -15,6 +15,7 @@ wakelockinformation_cols = ["userhash"  ,"bright_count"  ,"dim_locks"  , "partia
 wifiaccesspoints_cols = ["userhash"  ,"current_rssi"  , "timestamp"  , "current_bssid"  ,"access_point_count"  ,"probe_transmit_mode"  ,"current_link_speed"  , "current_ssid" ]
 sunrisesunsetfeature_cols = ["userhash"  ,"sunset"  , "timestamp"  , "longitude"  ,"sunrise"  ,"is_day"  ,"sunrise_distance"  ,"sunset_distance"  ,"probe_transmit_mode"  , "latitude"  ,"day_duration" ]
 location_cols = ["userhash"  ,"time_fix"  , "longitude"  ,"altitude"  ,"probe_transmit_mode"  , "accuracy"  , "gps_available"  ,"speed"  ,"timestamp"  , "provider"  ,"network_available"  ,"bearing"  ,"latitude"]
+
 def isColPresent(tname,key):
     key = key.lower()
     if(tname.find("BatteryProbe")!=-1):

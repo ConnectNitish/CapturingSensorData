@@ -28,8 +28,7 @@
         }
     </style>
 </head>
-{% extends "home.html" %}
-{% block content %}
+
 <body>
 <section class="section">
     <div class="container">
@@ -69,7 +68,7 @@
     
 
         function visulaization(){
-            $.post('{{ url_for("retrieve_user_data", user_hash={{user_hash}})}}', {
+            $.post('{{ url_for("retrieve_user_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
             
             }).done(function(response) {
                 
@@ -129,14 +128,14 @@
                     }
                   };
 
-                var battery_data = {
+                var net_data = {
                   x: response['net_speed_timestamp'],
                   y: response['net_speed']
                 };
 
-                var battery_data_list = [battery_data];
+                var net_data_list = [net_data];
 
-                Plotly.newPlot('battery',battery_data_list,battery_layout);
+                Plotly.newPlot('network_speed',net_data_list,net_speed_layout);
                 //End network speed data processing
 
                 //Start gps data processing
@@ -184,7 +183,7 @@
     </script>
 </body>
 
-{% endblock %}
+
 </html>
 
 

@@ -83,3 +83,9 @@
             # ImmutableMultiDict([]) 
             return str(request.form['json_str']
      )
+
+
+
+{% extends "home.html" %}
+{% block content %}
+     {% endblock %}

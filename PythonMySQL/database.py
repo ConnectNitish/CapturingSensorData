@@ -1,7 +1,8 @@
-import mysql.connector
-from mysql.connector import Error
+#import mysql.connector
+#from mysql.connector import Error
 import psycopg2
 from datetime import datetime
+import datetime
 
 class Database:
     my_cursor = None
@@ -16,42 +17,47 @@ class Database:
                                     user=user,
                                     password=pwd)
         self.my_cursor =  self.conn.cursor()
-        print("---------------Object Creation IN DB ------------------------------")
 
-    def probe_info(self):
+    def probe_info(self,userhash):
         ret_dict = {}
         x1 = self.get_battery()
+        #print(x1)
         uids = {}
         for r in x1:
-            dt_object = datetime.fromtimestamp(int(r[2]))
-            # dt_object = r[2]
-            uids[r[0]] = [r[1],str(dt_object)]
-        # print(r[0])
-        ret_dict["battery"]=uids
-        # print(uids)
+            dt_object = datetime.datetime.fromtimestamp(int(r[2]))
+            if(r[0]==userhash):
+                uids[r[0]] = [r[1],str(dt_object)]
+            # print(r[0])
+        if(x1):
+            ret_dict["battery"]=uids
+        # print(ret_dict)
         # print("----------------------------")
         x2 = self.get_callState()
         uids = {}
         for r in x2:
-            dt_object = datetime.fromtimestamp(int(r[2]))
-            uids[r[0]] = [r[1],str(dt_object)]
+            dt_object = datetime.datetime.fromtimestamp(int(r[2]))
+            if(r[0]==userhash):
+                uids[r[0]] = [r[1],str(dt_object)]
             # print(r[0])
-        ret_dict["callstate"]=uids
+        if(x2):
+            ret_dict["callstate"]=uids
         # print(uids)
         # print("----------------------------")
         x3 = self.get_location()
         uids = {}
         for r in x3:
-            dt_object = datetime.fromtimestamp(int(r[3]))
-            uids[r[0]] = [r[1],r[2],str(dt_object)]
+            dt_object = datetime.datetime.fromtimestamp(int(r[3]))
+            if(r[0]==userhash):
+                uids[r[0]] = [r[1],r[2],str(dt_object)]
             # print(r[0])
-        ret_dict["location"]=uids
+        if(x3):
+            ret_dict["location"]=uids
         # print(uids)
         return ret_dict
 
     
     def get_battery(self):
-        self.my_cursor.execute("""select userhash,level,timestamp from battery order by timestamp""")
+        self.my_cursor.execute("""select userhash,scale,timestamp from battery order by timestamp""")
         rows = self.my_cursor.fetchall()
         # print(rows)
         return rows
@@ -64,6 +70,19 @@ class Database:
 
     def get_location(self):
         self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location order by timestamp""")
+        rows = self.my_cursor.fetchall()
+        # print(rows)
+        return rows
+    
+    def getWifiDataForPresentation(self):
+        self.my_cursor.execute("""select DISTINCT current_bssid,current_link_speed,access_point_count,current_ssid,userhash from wifiaccesspoints
+order by userhash """)
+        rows = self.my_cursor.fetchall()
+        # print(rows)
+        return rows
+
+    def getNetworkDetailsForPresentation(self):
+        self.my_cursor.execute("""select hostname,IP_address,userhash from network WHERE interface_name!='' order by userhash""")
         rows = self.my_cursor.fetchall()
         # print(rows)
         return rows
@@ -107,11 +126,9 @@ class Database:
         print(sql_insert_query)
         return sql_insert_query
 
-    # newobj.insert(k,col_str,s_str,tuple(record_list),myf)
-
     def insert(self,tname,col_str,s_str,record_list,myf):
         sql_insert_query = ""
-        print("tname ----- IN DB ",tname)
+        # print("tname ",tname)
         if(tname == "CallStateProbe"):
             print("values to insert-----------------------")
             print(record_list)
@@ -191,7 +208,228 @@ class Database:
         else:
             print("new probe found with tname------",tname)
 
+    
+    def get_battery_details_for_user(self,userhash,till_date=1):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        self.my_cursor.execute("""select userhash,level,timestamp from battery where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"' order by timestamp")
+        rows = self.my_cursor.fetchall()
+        level_list = []
+        timestamp_list = []
+        for r in rows:
+            level_list.append(r[1])
+            timestamp_list.append(r[2])
+        ret_dict = {}
+        ret_dict["level"] = level_list
+        ret_dict["timestamp"] = timestamp_list
+        return ret_dict 
+    
+    
+    def get_callstate_details_for_user(self,userhash,till_date=5):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        self.my_cursor.execute("""select userhash,call_state,timestamp from callstate where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
+        rows = self.my_cursor.fetchall()
+        callstate_list = []
+        timestamp_list = []
+        for r in rows:
+            callstate_list.append(r[1])
+            timestamp_list.append(r[2])
+        unique_call_states = []
+        for r in callstate_list:
+            if(r not in unique_call_states):
+                unique_call_states.append(r)
+        ret_dict = {}
+        for call_s in unique_call_states:
+            ret_dict[call_s] = callstate_list.count(call_s)
+
+        
+        # print(ret_dict)
+        
+        return ret_dict 
+
+
+    def get_wifi_details_for_user(self,userhash,till_date=1):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        self.my_cursor.execute("""select userhash,current_link_speed,timestamp from wifiaccesspoints where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"' order by timestamp")
+        rows = self.my_cursor.fetchall()
+        current_link_speed_list = []
+        timestamp_list = []
+        for r in rows:
+            current_link_speed_list.append(r[1])
+            timestamp_list.append(r[2])
+        ret_dict = {}
+        ret_dict["speed"] = current_link_speed_list
+        ret_dict["timestamp"] = timestamp_list
+        return ret_dict 
+
+    def get_location_details_for_user(self,userhash,till_date=1):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
+        rows = self.my_cursor.fetchall()
+        latitude_list = []
+        longitude_list = []
+        timestamp_list = []
+        for r in rows:
+            latitude_list.append(r[2])
+            longitude_list.append(r[1])
+            timestamp_list.append(r[3])
+        ret_dict = {}
+        ret_dict["latitude"] = latitude_list
+        ret_dict["longitude"] = longitude_list
+        ret_dict["timestamp"] = timestamp_list
+        return ret_dict 
+
+    def getAllUserHash(self):
+        ret_list = []
+        self.my_cursor.execute("""select userhash from battery""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        
+        self.my_cursor.execute("""select userhash from callstate""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        
+        self.my_cursor.execute("""select userhash from datecalendar""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        
+        self.my_cursor.execute("""select userhash from network""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+
+        self.my_cursor.execute("""select userhash from wakelockinformation""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        
+        self.my_cursor.execute("""select userhash from wifiaccesspoints""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        self.my_cursor.execute("""select userhash from sunrisesunsetfeature""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+
+        self.my_cursor.execute("""select userhash from location""")
+        rows = self.my_cursor.fetchall()
+        for r in rows:
+            if(r[0] not in ret_list):
+                ret_list.append(r[0])
+        
+        # print("ret_list")
+        # print(ret_list)
+        for r in ret_list:
+            print("r = ",r)
+            tlist = []
+            tlist.append(r)
+            myt = tuple(tlist)
+            print("tlist",myt)
+            sql_insert_query = """ INSERT INTO allusers (userhash) VALUES (%s)"""
+            result = self.my_cursor.execute(sql_insert_query, myt)
+            print(result)
+            self.conn.commit()
+
+        self.my_cursor.execute("""select userhash from allusers""")
+        rows123 = self.my_cursor.fetchall()
+        return rows123
+
+	#Get Battery Info Of All User For Last 24 hrs 
+    def getBatteryInforForAllUsers(self,till_date=5):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
+        self.my_cursor.execute("""SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery,(select userhash,count(distinct level) as countlevel from (SELECT * FROM battery WHERE timestamp >= """ + "'"+ str(dt) +"'"+ """) B group by userhash order by countlevel desc limit 3) AA WHERE AA.userhash = battery.userhash AND battery.timestamp >= """ + "'" + str(dt) + "'" + """ ORDER BY battery.userhash,battery.timestamp """)
+        rows = self.my_cursor.fetchall()
+        #print(rows)
+        data_final = {}
+
+        level_value_for_user = []
+        level_value_for_timestamp = []
+        
+
+        for r in rows:
+
+            if len(r)>=3 :
+
+                userhash_temp = r[0]
+                level_temp = r[1]
+                timestamp_temp = r[2]
+
+                if userhash_temp in data_final.keys():
+                    level_value_for_user = data_final[userhash_temp]["BatteryLevel"]
+                    level_value_for_timestamp = data_final[userhash_temp]["BatteryTimeStamp"]
+                    level_value_for_timestamp.append(timestamp_temp)
+                    level_value_for_user.append(level_temp)
+                else:
+                    level_value_for_timestamp.append(timestamp_temp)
+                    level_value_for_user.append(level_temp)
+
+                data_final[userhash_temp] = { "BatteryLevel": level_value_for_user,"BatteryTimeStamp" : level_value_for_timestamp }
+                #data_final[userhash_temp] = { "BatteryTimeStamp" : level_value_for_timestamp }
+                    
+        return data_final 
+
+	#Get Battery Info Of All User For Last As Per Location 
+    def getBatteryInforForAllUsersAsPerLocation(self,latitude_temp,longitude_temp,threshold_value,till_date=5):
+        dt = datetime.datetime.today() - datetime.timedelta(till_date)
+        dt = dt.timestamp()
+        # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
+        self.my_cursor.execute(""" SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery where userhash IN (select userhash from location where longitude <= cast (""" + str(longitude_temp + threshold_value) + """ as text) AND longitude >= cast( """ + str(longitude_temp - threshold_value) + """ as text) AND latitude <= cast ( """ + str(latitude_temp + threshold_value) + """ as text) AND latitude >= cast( """ + str(latitude_temp - threshold_value) + """ as text) AND timestamp >= """ + "'" + str(dt) + "'" + """ ) AND battery.timestamp >= """ + "'" + str(dt) + "'")
+        rows = self.my_cursor.fetchall()
+        print(rows)
+        data_final = {}
+
+        level_value_for_user = []
+        level_value_for_timestamp = []
+        
+
+        for r in rows:
+
+            if len(r)>=3 :
+
+                userhash_temp = r[0]
+                level_temp = r[1]
+                timestamp_temp = r[2]
+
+                if userhash_temp in data_final.keys():
+                    level_value_for_user = data_final[userhash_temp]["BatteryLevel"]
+                    level_value_for_timestamp = data_final[userhash_temp]["BatteryTimeStamp"]
+                    level_value_for_timestamp.append(timestamp_temp)
+                    level_value_for_user.append(level_temp)
+                else:
+                    level_value_for_timestamp.append(timestamp_temp)
+                    level_value_for_user.append(level_temp)
+
+                data_final[userhash_temp] = { "BatteryLevel": level_value_for_user,"BatteryTimeStamp" : level_value_for_timestamp }
+                #data_final[userhash_temp] = { "BatteryTimeStamp" : level_value_for_timestamp }
+                    
+        return data_final 
+
     def close_conn_cursor(self):
         self.my_cursor.close()
         self.conn.close()
 
+
+
+if __name__ == "__main__":
+    print("AAAAA")
+    dbInstance = Database("127.0.0.1",'python_mysql','postgres','test')
+    print(dbInstance.getWifiDataForPresentation())
+    # print(dbInstance.getBatteryInforForAllUsersAsPerLocation(17.445437,78.3456945,0.0035))
+	# InvokeDBFunc()
+    # print(dbInstance.probe_info())
