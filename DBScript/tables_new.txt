@@ -17,6 +17,8 @@ truncate table network;
 truncate table datecalendar;
 truncate table battery;
 
+create table allusers(id serial primary key,userhash text unique);
+
 drop table callstate;
 create table callstate (id serial primary key,userhash text,call_state text,timestamp text,probe_transmit_mode text);
 
