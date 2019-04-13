@@ -1,4 +1,4 @@
-<h1>CONTRIBUTROS</h1>
+<h1>CONTRIBUTORS</h1>
 
 <strong>Nitish Srivastava</strong><br>
 <strong>Chittarajan Rath</strong><br>
