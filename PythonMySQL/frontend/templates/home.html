@@ -3,6 +3,38 @@
 
 {% block content %}
 
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    For Specific User
+  </button>
+</nav>
+
+<div class="modal fade right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      
+  <div class="modal-dialog modal-full-height modal-right" role="document">
+
+        <div class="modal-content">  
+          <div class="modal-header">
+            <h4 class="modal-title w-100" id="myModalLabel">Please click on the UserId</h4>
+
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          
+          <div class="modal-body">
+            {% for i in range(400) %}
+              <a href="#" class="btn btn-secondry" role="button">ok</a><br>
+            {% endfor %}
+          </div>
+          
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+</div>
 
 
 <section class="section">
@@ -27,7 +59,8 @@
 <script type="text/javascript">
 
   function visulaization(){
-      $.post('{{ url_for("retrieve_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
+      // $.post('{{ url_for("retrieve_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
+      $.post('{{ url_for("retrieve_data")}}', {
       
       }).done(function(response) {
           
@@ -147,7 +180,7 @@
 
 </div>
 
-
+<br><br><br><br>
 
 <div class="container">
   <h2>Wifi Information</h2>

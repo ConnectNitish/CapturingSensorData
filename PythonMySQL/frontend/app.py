@@ -7,12 +7,10 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 import BusinessLayer as  bl
-# create flask app
+
 app = Flask(__name__)
 
-# global max_size
 max_size = 20
-# days
 days = 5
 
 @app.route("/")
@@ -30,13 +28,16 @@ def index():
 
     return render_template("home.html",info = info)
 
+
 @app.route('/navigate_to_user/<user_hash>', methods=['GET', 'POST']) 
 def navigate_to_user(user_hash):
     return render_template("index.html", user_hash = user_hash)
 
-
+#used at home page for 5 users only
 @app.route("/retrieve_data", methods=['GET', 'POST'])
 def retrieve_data():
+
+    print("From home.html")
 
     bLayerObj = bl.BusinessLayer()
 
@@ -51,11 +52,12 @@ def retrieve_data():
 
     return jsonify(data_dict)
     
-
+#specific to a particular user
 @app.route('/retrieve_user_data/<user_hash>', methods=['GET', 'POST']) 
 def retrieve_user_data(user_hash):
     
     print("Request received")
+    print(user_hash)
 
     probe_list = ["battery","callstate","location","network"]
     
@@ -91,9 +93,9 @@ def retrieve_user_data(user_hash):
     
     call_state_data_probe = bLayerObj.get_callstate_details_for_user(user_hash,days)
 
-    call_state_count_list[2] = call_state_data_probe["ringing"]
-    call_state_count_list[1] = call_state_data_probe["off-hook"]
     call_state_count_list[0] = call_state_data_probe["idle"]
+    call_state_count_list[1] = call_state_data_probe["off-hook"]
+    call_state_count_list[2] = call_state_data_probe["ringing"]
         
     
     location_data_probe = bLayerObj.get_location_details_for_user(user_hash,days)

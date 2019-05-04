@@ -31,10 +31,12 @@
 
 {% extends "layout.html" %}
 {% block content %}
+
+
 <body>
 <section class="section">
     <div class="container">
-        <h1 class="title"><strong>DashBoard</strong></h1>
+        
         <hr>
         <div class="columns">
             <div class="column">
@@ -62,7 +64,7 @@
     
 
         function visulaization(){
-            $.post('{{ url_for("retrieve_user_data", user_hash="{{user_hash}}")}}', {
+            $.post('{{ url_for("retrieve_user_data", user_hash=user_hash)}}', {
             
             }).done(function(response) {
                 

@@ -14,7 +14,9 @@ Send a HEAD request::
 Send a POST request::
     curl -d "foo=bar&bin=baz" http://localhost
 """
+# from http.server import BaseHTTPRequestHandler,HTTPServer
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+# import socketserver
 import SocketServer
 from json import loads
 from dicttoxml import dicttoxml
@@ -27,22 +29,22 @@ def timeStamped(fname, fmt='%Y-%m-%d-%H-%M-%S_{fname}'):
     return datetime.datetime.now().strftime(fmt).format(fname=fname)
 
 class S(BaseHTTPRequestHandler):
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
+	def _set_headers(self):
+		self.send_response(200)
+		self.send_header('Content-type', 'text/html')
+		self.end_headers()
 
-    def do_GET(self):
-	    #ClassNeed.connect(None)
-	    print("AAAAAAAAAAAAAAAAAAAAAAAA")
+	def do_GET(self):
+		#ClassNeed.connect(None)
+		print("AAAAAAAAAAAAAAAAAAAAAAAA")
 		#self._set_headers()
 		#self.wfile.write("<html><body><h1>hi!</h1></body></html>")
 
-    def do_HEAD(self):
-        self._set_headers()
-        
-    def do_POST(self):
-        # Doesn't do anything with posted data
+	def do_HEAD(self):
+		self._set_headers()
+
+	def do_POST(self):
+		# Doesn't do anything with posted data
 		print("BBBBBBBBBBBBBBBBB")
 		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
 		post_data = self.rfile.read(content_length) # <--- Gets the data itself
@@ -58,10 +60,10 @@ class S(BaseHTTPRequestHandler):
 		#	outf.write(post_data)
 		with open(name_of_file_to_Store,'w') as outf:
 			outf.write(post_data)
-		post_data = str(post_data)
+			post_data = str(post_data)
 
-		SaveDataobj = saveDB.SaveData()
-		SaveDataobj.SaveDataToDB()
+		#SaveDataobj = saveDB.SaveData()
+		#SaveDataobj.SaveDataToDB()
 
 
 		#xml_data = dicttoxml(loads(post_data))
@@ -80,7 +82,9 @@ class S(BaseHTTPRequestHandler):
 		self.wfile.write("<html><body><h1>POST!</h1></body></html>")
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
-    server_address = ('192.168.122.1', port)
+    # server_address = ('192.168.122.1', port)
+    # server_address = ('10.42.0.235', port)
+    server_address = ('127.0.0.1', port)
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...')
     httpd.serve_forever()

@@ -156,3 +156,525 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+  <div class="jumbotron" class="align-middle">
+    <h3>DashBoard</h3>
+    <p>It visualise the information of all collected data from users.</p>
+  </div>
+
+   <!-- The Modal -->
+   <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        
+          
+          <div class="modal-header">
+            <h4 class="modal-title">Please click on the UserId</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body">
+            {% for i in range(4) %}
+              <a href="#" class="btn btn-secondry" role="button">ok</a><br>
+            {% endfor %}
+          </div>
+          
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      For Specific User
+    </button>
+  </nav>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="section">
+  <div class="container">
+      
+       
+      <hr>
+      <div class="columns">
+          <div class="column">
+              <h5 class="title is-6">Battery Level vs Time Graph</h5>
+              <div id="active_user_battery" class="chart"></div>
+          </div>
+          <div class="column">
+              <h5 class="title is-6">Call State of User</h5>
+              <div id="location_based_user_battery" class="chart"></div>
+          </div>
+          
+      </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+  function visulaization(){
+      $.post('{{ url_for("retrieve_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
+      
+      }).done(function(response) {
+          
+          console.log(response)
+
+          //Start battery data processing of five most active users
+          var active_user_battery_layout = {
+              title: 'Battery Level',
+              xaxis: {
+                title: 'Time',
+                showgrid: false,
+                zeroline: false
+              },
+              yaxis: {
+                title: 'Level',
+                showline: false
+              }
+            };
+
+          active_user_data = response["active_user_data"];
+          
+
+          var active_user_battery_data_list = []
+
+          for (var key in active_user_data) {
+              
+              if (active_user_data.hasOwnProperty(key)) {           
+                  // console.log(key, active_user_data[key]);
+
+                  active_user_battery_data_list.push(
+                    {
+                      x : active_user_data[key]["BatteryTimeStamp"],
+                      y : active_user_data[key]["BatteryLevel"]
+                    }
+                  )
+
+              }
+          }
+
+          Plotly.newPlot('active_user_battery',active_user_battery_data_list,active_user_battery_layout);
+          //End battery data processing of five most active users
+
+          //Start battery data processing based on geolocation
+          var location_based_battery_layout = {
+              title: 'Battery Level',
+              xaxis: {
+                title: 'Time',
+                showgrid: false,
+                zeroline: false
+              },
+              yaxis: {
+                title: 'Level',
+                showline: false
+              }
+            };
+
+          location_based_user_data = response["location_based_user_data"];
+
+          var location_based_user_battery_data = []
+
+          for (var key in location_based_user_data) {
+              
+              if (location_based_user_data.hasOwnProperty(key)) {           
+                  console.log(key, location_based_user_data[key]);
+
+                  location_based_user_battery_data.push(
+                    {
+                      x : location_based_user_data[key]["BatteryTimeStamp"],
+                      y : location_based_user_data[key]["BatteryLevel"]
+                    }
+                  )
+
+              }
+          }
+
+          Plotly.newPlot('location_based_user_battery',location_based_user_battery_data,location_based_battery_layout);
+          //End battery data processing based on geolocation
+
+
+
+      }).fail(function() {
+          console.log("something went wrong with the request");
+      });
+  }
+
+  $(document).ready(function(){
+      setInterval("visulaization()", 10000);
+  });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+  function visulaization(){
+      $.post('{{ url_for("retrieve_data", user_hash="34237272481aa6a02ea94799695a6982")}}', {
+      
+      }).done(function(response) {
+          
+          console.log(response)
+
+          //Start battery data processing of five most active users
+          var active_user_battery_layout = {
+              title: 'Battery Level',
+              xaxis: {
+                title: 'Time',
+                showgrid: false,
+                zeroline: false
+              },
+              yaxis: {
+                title: 'Level',
+                showline: false
+              }
+            };
+
+          active_user_data = response["active_user_data"];
+          
+
+          var active_user_battery_data_list = []
+
+          for (var key in active_user_data) {
+              
+              if (active_user_data.hasOwnProperty(key)) {           
+                  // console.log(key, active_user_data[key]);
+
+                  active_user_battery_data_list.push(
+                    {
+                      x : active_user_data[key]["BatteryTimeStamp"],
+                      y : active_user_data[key]["BatteryLevel"]
+                    }
+                  )
+
+              }
+          }
+
+          Plotly.newPlot('active_user_battery',active_user_battery_data_list,active_user_battery_layout);
+          //End battery data processing of five most active users
+
+          //Start battery data processing based on geolocation
+          var location_based_battery_layout = {
+              title: 'Battery Level',
+              xaxis: {
+                title: 'Time',
+                showgrid: false,
+                zeroline: false
+              },
+              yaxis: {
+                title: 'Level',
+                showline: false
+              }
+            };
+
+          location_based_user_data = response["location_based_user_data"];
+
+          var location_based_user_battery_data = []
+
+          for (var key in location_based_user_data) {
+              
+              if (location_based_user_data.hasOwnProperty(key)) {           
+                  console.log(key, location_based_user_data[key]);
+
+                  location_based_user_battery_data.push(
+                    {
+                      x : location_based_user_data[key]["BatteryTimeStamp"],
+                      y : location_based_user_data[key]["BatteryLevel"]
+                    }
+                  )
+
+              }
+          }
+
+          Plotly.newPlot('location_based_user_battery',location_based_user_battery_data,location_based_battery_layout);
+          //End battery data processing based on geolocation
+
+
+
+      }).fail(function() {
+          console.log("something went wrong with the request");
+      });
+  }
+
+  $(document).ready(function(){
+      setInterval("visulaization()", 10000);
+  });
+
+</script>
+
+
+<div class="container">
+  <h2>Network Information</h2>
+  <p>It shows the various information regarding network of User</p>            
+  <div class="network_table">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>UserHash</th>
+        <th>Hostname</th>
+        <th>IP Address</th>
+      </tr>
+    </thead> 
+    <tbody>
+      {% for tuples_d in info["networkInfo"] %}
+      <tr>
+        <td>{{ tuples_d[2] }}</td>
+        <td>{{ tuples_d[0] }}</td>
+        <td>{{ tuples_d[1] }}</td>
+      </tr>
+    {% endfor %}
+     
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+
+<div class="container">
+  <h2>Wifi Information</h2>
+  <p>It shows the various wifi regarding network of User</p>            
+  <div class="wifi_table">  
+    <table class="table">
+      <thead>
+        <tr>
+          <th>UserHash</th>
+          <th>Link_Speed</th>
+          <th>Access_Point_Count</th>
+          <th>BSSID</th>
+        </tr>
+      </thead>
+      <tbody>
+          
+       {% for use in info["wifi"] %}
+        <tr>
+          <td>{{ use[4] }}</td>
+          <td>{{ use[1] }}</td>
+          
+          <td>{{ use[2] }}</td>
+          <td>{{ use[0] }}</td>
+        </tr>
+      {% endfor %}
+       
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container">
+  <div class="jumbotron" class="align-middle">
+    <h3>DashBoard</h3>
+    <p>It visualise the information of all collected data from users.</p>
+  </div>
+
+   <!-- The Modal -->
+   <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        
+          
+          <div class="modal-header">
+            <h4 class="modal-title">Please click on the UserId</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          
+          <!-- Modal body -->
+          <div class="modal-body">
+            {% for i in range(4) %}
+              <a href="#" class="btn btn-secondry" role="button">ok</a><br>
+            {% endfor %}
+          </div>
+          
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    For Specific User
+  </button>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+{% block content %}
+{%  endblock %}
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+      For Specific User
+    </button>
+  </nav>
+
+   <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        
+          
+          <div class="modal-header">
+            <h4 class="modal-title">Please click on the UserId</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          
+          <div class="modal-body">
+            {% for i in range(4) %}
+              <a href="#" class="btn btn-secondry" role="button">ok</a><br>
+            {% endfor %}
+          </div>
+          
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
