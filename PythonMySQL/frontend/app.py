@@ -26,7 +26,9 @@ def index():
         "wifi":wifi
     }
 
-    return render_template("home.html",info = info)
+    user_list = ["34237272481aa6a02ea94799695a6982","34237272481aa6a02ea94799695a6982"]
+
+    return render_template("home.html",info = info, user_list = user_list)
 
 
 @app.route('/navigate_to_user/<user_hash>', methods=['GET', 'POST']) 

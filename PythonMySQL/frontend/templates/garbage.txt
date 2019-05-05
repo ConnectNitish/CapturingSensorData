@@ -678,3 +678,18 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+      <a href="navigate_to_user/{{ user }}" class="btn btn-secondry" role="button">{{ user }}</a><br>

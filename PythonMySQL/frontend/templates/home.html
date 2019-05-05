@@ -17,13 +17,16 @@
           <div class="modal-header">
             <h4 class="modal-title w-100" id="myModalLabel">Please click on the UserId</h4>
 
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+      
           </div>
           
           <div class="modal-body">
-            {% for i in range(400) %}
-              <a href="#" class="btn btn-secondry" role="button">ok</a><br>
+
+            {% for user in user_list %}
+                  <button type="button" class="btn btn-info" onclick="window.location.href = 'navigate_to_user/{{ user }}';">{{ user }}</button><br>
+                
             {% endfor %}
+
           </div>
           
 
