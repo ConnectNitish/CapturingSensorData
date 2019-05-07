@@ -12,10 +12,7 @@ class Database:
         self.dbname = dbname
         self.user  = user
         self.password = pwd
-        self.conn = psycopg2.connect(host=host,
-                                    database=dbname,
-                                    user=user,
-                                    password=pwd)
+        self.conn = psycopg2.connect(host='127.0.0.1',database='python_mysql',user='postgres',password='qwerty')
         self.my_cursor =  self.conn.cursor()
 
     def probe_info(self,userhash):
@@ -432,7 +429,7 @@ order by userhash """)
 
 if __name__ == "__main__":
     print("AAAAA")
-    dbInstance = Database("127.0.0.1",'mydb3','postgres','qwerty')
+    dbInstance = Database('127.0.0.1','python_mysql','postgres','test')
     # print(dbInstance.getWifiDataForPresentation())
     # print(dbInstance.getBatteryInforForAllUsers())
     print(dbInstance.getBatteryInforForAllUsersAsPerLocation(17.445437,78.3456945,0.0035))

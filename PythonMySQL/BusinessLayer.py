@@ -16,8 +16,7 @@ class BusinessLayer:
 
 	def CreateConnection(self):
 		if self.connection == None:
-			# self.connection = db.Database("127.0.0.1",'python_mysql','postgres','qwerty')
-			self.connection = db.Database('127.0.0.1','mydb3','postgres','qwerty')
+			self.connection = db.Database('127.0.0.1','python_mysql','postgres','test')
 	
 	def getProbeInfo(self,userhash):
 		self.CreateConnection()
