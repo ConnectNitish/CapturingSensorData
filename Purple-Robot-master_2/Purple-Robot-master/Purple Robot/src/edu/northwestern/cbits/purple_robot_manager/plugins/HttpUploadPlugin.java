@@ -97,10 +97,25 @@ class HttpURLConnectionExampleCheck {
 
     private static final String USER_AGENT = "Mozilla/5.0";
 
-    private static final String GET_URL = "http://192.168.122.1:8000/";
+    String prakash_final_URL = "http://127.0.0.1:8000/";
 
-    //private static final String POST_URL = "http://192.168.122.1:8000/";
-    private static final String POST_URL = "http://192.168.122.1:8080/";
+//    private static final String GET_URL = "http://192.168.122.1:8000/";
+
+
+//    private static final String POST_URL = "http://192.168.122.1:8000/";
+
+    //private static final String GET_URL = "http://10.4.20.64:5543/";
+    //private static final String POST_URL = "http://10.4.20.64:5543/";
+
+    //    private static final String POST_URL = "http://localhost:8080/";
+
+
+    //    private static final String GET_URL = "http://localhost:8080/";
+
+    private static final String GET_URL = "http://dsac.msens.iiit.ac.in/";
+
+    //    private static final String POST_URL = "http://192.168.122.1:8000/";
+    private static final String POST_URL = "http://dsac.msens.iiit.ac.in/";
 
     private static final String POST_PARAMS = "userName=Pankaj";
 
