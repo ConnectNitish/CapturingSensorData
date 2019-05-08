@@ -99,13 +99,41 @@ class BusinessLayer:
 		self.connection = None
 		return x
 
+	def getAllUserHashDistinct(self):
+		self.CreateConnection()
+		x = self.connection.getAllUserHash()
+		print(x)
+		distinct_user_List = []
+		for item in x:
+			if item not in distinct_user_List:
+				distinct_user_List.append(list(item)[0])
+		self.connection.close_conn_cursor()
+		self.connection = None
+		return distinct_user_List
+
+	def get_default_location(self):
+		self.CreateConnection()
+		x = self.connection.get_default_location()
+		self.connection.close_conn_cursor()
+		self.connection = None
+		temp_list = []
+		for xx in x:
+			for yy in xx:
+				temp_list.append(float(yy))
+		# print(temp_list)
+		return temp_list
+
+
+
 if __name__ == "__main__":
 	bobj = BusinessLayer()
 	# print(bobj.getProbeInfo('34237272481aa6a02ea94799695a6982'))	
-	print(bobj.getBatteryInfoForAllUser())
+	# print(bobj.getBatteryInfoForAllUser())
 	# print(bobj.getWifiDataForPresentation())
 	# print(bobj.getNetworkDetailsForPresentation())
 	# print(bobj.get_wifi_details_for_user('34237272481aa6a02ea94799695a6982'))
 	# print(bobj.get_battery_details_for_user('34237272481aa6a02ea94799695a6982'))
-	# # print(bobj.get_callstate_details_for_user('34237272481aa6a02ea94799695a6982',2))
+	# print(bobj.get_callstate_details_for_user('34237272481aa6a02ea94799695a6982',2))
 	# # print(bobj.get_location_details_for_user('34237272481aa6a02ea94799695a6982'))
+	print(bobj.getAllUserHashDistinct())
+	# print(bobj.get_default_location())

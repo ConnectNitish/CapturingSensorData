@@ -72,14 +72,13 @@ class Database:
         return rows
     
     def getWifiDataForPresentation(self):
-        self.my_cursor.execute("""select DISTINCT current_bssid,current_link_speed,access_point_count,current_ssid,userhash from wifiaccesspoints
-order by userhash """)
+        self.my_cursor.execute("""select DISTINCT current_bssid,current_link_speed,access_point_count,current_ssid,userhash from wifiaccesspoints where current_bssid!='' order by userhash """)
         rows = self.my_cursor.fetchall()
         # print(rows)
         return rows
 
     def getNetworkDetailsForPresentation(self):
-        self.my_cursor.execute("""select hostname,IP_address,userhash from network WHERE interface_name!='' order by userhash""")
+        self.my_cursor.execute("""select DISTINCT hostname,IP_address,userhash from network WHERE interface_name!='' order by userhash""")
         rows = self.my_cursor.fetchall()
         # print(rows)
         return rows
@@ -209,7 +208,7 @@ order by userhash """)
     def get_battery_details_for_user(self,userhash,till_date=1):
         dt = datetime.datetime.today() - datetime.timedelta(till_date)
         dt = dt.timestamp()
-        self.my_cursor.execute("""select userhash,level,timestamp from battery where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"' order by timestamp")
+        self.my_cursor.execute("""select userhash,level,timestamp from battery where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"' order by timestamp LIMIT 50")
         rows = self.my_cursor.fetchall()
         level_list = []
         timestamp_list = []
@@ -279,6 +278,12 @@ order by userhash """)
         ret_dict["timestamp"] = timestamp_list
         return ret_dict 
 
+    def getAllUserHashDistinct(self):
+        ret_list = []
+        self.my_cursor.execute("""select distinct userhash from allusers""")
+        rows123 = self.my_cursor.fetchall()
+        return rows123
+
     def getAllUserHash(self):
         ret_list = []
         self.my_cursor.execute("""select userhash from battery""")
@@ -327,7 +332,9 @@ order by userhash """)
         for r in rows:
             if(r[0] not in ret_list):
                 ret_list.append(r[0])
-        
+
+        #print("SSSS")
+        #print("AAA")
         # print("ret_list")
         # print(ret_list)
         for r in ret_list:
@@ -336,21 +343,27 @@ order by userhash """)
             tlist.append(r)
             myt = tuple(tlist)
             print("tlist",myt)
-            sql_insert_query = """ INSERT INTO allusers (userhash) VALUES (%s)"""
-            result = self.my_cursor.execute(sql_insert_query, myt)
-            print(result)
-            self.conn.commit()
+            
+            self.my_cursor.execute("""select userhash from allusers where userhash = """+"'"+r+"'")
+            result_Check = self.my_cursor.fetchall()
+            #print("AAAAADDDDD")
+            print(result_Check)
+            if len(result_Check) <= 0:
+                sql_insert_query = """ INSERT INTO allusers (userhash) VALUES (%s)"""
+                result = self.my_cursor.execute(sql_insert_query, myt)
+                print(result)
+                self.conn.commit()
 
-        self.my_cursor.execute("""select userhash from allusers""")
+        self.my_cursor.execute("""select distinct userhash from allusers""")
         rows123 = self.my_cursor.fetchall()
         return rows123
 
-	#Get Battery Info Of All User For Last 24 hrs 
-    def getBatteryInforForAllUsers(self,till_date=5):
+    #Get Battery Info Of All User For Last 24 hrs 
+    def getBatteryInforForAllUsers(self,till_date=2):
         dt = datetime.datetime.today() - datetime.timedelta(till_date)
         dt = dt.timestamp()
         # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
-        self.my_cursor.execute("""SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery,(select userhash,count(distinct level) as countlevel from (SELECT * FROM battery WHERE timestamp >= """ + "'"+ str(dt) +"'"+ """) B group by userhash order by countlevel desc limit 3) AA WHERE AA.userhash = battery.userhash AND battery.timestamp >= """ + "'" + str(dt) + "'" + """ ORDER BY battery.userhash,battery.timestamp """)
+        self.my_cursor.execute("""SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery,(select userhash,count(distinct level) as countlevel from (SELECT * FROM battery WHERE timestamp >= """ + "'"+ str(dt) +"'"+ """) B group by userhash order by countlevel desc limit 3) AA WHERE AA.userhash = battery.userhash AND battery.timestamp >= """ + "'" + str(dt) + "'" + """ ORDER BY battery.timestamp desc LIMIT 50""")
         rows = self.my_cursor.fetchall()
         print(len(rows))
         data_final = {}
@@ -383,12 +396,12 @@ order by userhash """)
                     
         return data_final 
 
-	#Get Battery Info Of All User For Last As Per Location 
+    #Get Battery Info Of All User For Last As Per Location 
     def getBatteryInforForAllUsersAsPerLocation(self,latitude_temp,longitude_temp,threshold_value,till_date=5):
         dt = datetime.datetime.today() - datetime.timedelta(till_date)
         dt = dt.timestamp()
         # self.my_cursor.execute("""select userhash,longitude,latitude,timestamp from location where userhash="""+"'"+(userhash)+"'"+"""and timestamp >= """+"'"+str(dt) +"'")
-        self.my_cursor.execute(""" SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery where userhash IN (select userhash from location where longitude <= cast (""" + str(longitude_temp + threshold_value) + """ as text) AND longitude >= cast( """ + str(longitude_temp - threshold_value) + """ as text) AND latitude <= cast ( """ + str(latitude_temp + threshold_value) + """ as text) AND latitude >= cast( """ + str(latitude_temp - threshold_value) + """ as text) AND timestamp >= """ + "'" + str(dt) + "'" + """ ) AND battery.timestamp >= """ + "'" + str(dt) + "'")
+        self.my_cursor.execute(""" SELECT DISTINCT battery.userhash,battery.level,battery.timestamp FROM battery where userhash IN (select userhash from location where longitude <= cast (""" + str(longitude_temp + threshold_value) + """ as text) AND longitude >= cast( """ + str(longitude_temp - threshold_value) + """ as text) AND latitude <= cast ( """ + str(latitude_temp + threshold_value) + """ as text) AND latitude >= cast( """ + str(latitude_temp - threshold_value) + """ as text) AND timestamp >= """ + "'" + str(dt) + "'" + """ ) AND battery.timestamp >= """ + "'" + str(dt) + "' ORDER BY battery.timestamp desc LIMIT 50")
         rows = self.my_cursor.fetchall()
         # print(rows)
         data_final = {}
@@ -426,6 +439,13 @@ order by userhash """)
         self.conn.close()
 
 
+    def get_default_location(self):
+        self.my_cursor.execute("""select latitude,longitude,radius from popularlocations where place = 'default_location'""")
+        rows = self.my_cursor.fetchall()
+        # print(rows)
+        return rows
+
+
 
 if __name__ == "__main__":
     print("AAAAA")
@@ -433,5 +453,5 @@ if __name__ == "__main__":
     # print(dbInstance.getWifiDataForPresentation())
     # print(dbInstance.getBatteryInforForAllUsers())
     print(dbInstance.getBatteryInforForAllUsersAsPerLocation(17.445437,78.3456945,0.0035))
-	# InvokeDBFunc()
+    # InvokeDBFunc()
     # print(dbInstance.probe_info())
