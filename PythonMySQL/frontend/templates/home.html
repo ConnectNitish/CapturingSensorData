@@ -3,61 +3,112 @@
 
 {% block content %}
 
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    For Specific User
-  </button>
-</nav>
 
-<div class="modal fade right" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      
-  <div class="modal-dialog modal-full-height modal-right" role="document">
 
-        <div class="modal-content">  
-          <div class="modal-header">
-            <h4 class="modal-title w-100" id="myModalLabel">Please click on the UserId</h4>
 
-      
+    <br><br>
+      <div class="columns">
+          <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+          <div class="text-black text-center ">
+            <div>
+
+              <div class="column">
+                  <h5 class="title is-6">Battery Level vs Time Graph</h5>
+                  <div id="active_user_battery" class="chart"></div>
+              </div>
+              
+            </div>
           </div>
-          
-          <div class="modal-body">
+        </div>
 
-            {% for user in user_list %}
-                  <button type="button" class="btn btn-info" onclick="window.location.href = 'navigate_to_user/{{ user }}';">{{ user }}</button><br>
-                
-            {% endfor %}
+        
+        <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+        <div class="text-black text-center ">
+          <div>
 
+            <div class="column">
+                <h5 class="title is-6">Battery Level vs Time Graph at a particular location</h5>
+                <div id="location_based_user_battery" class="chart"></div>
+            </div>
+            
           </div>
-          
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-          
         </div>
       </div>
-    </div>
-</div>
 
-
-<section class="section">
-  <div class="container">
-      <!-- <h1 class="title"><strong>DashBoard </strong></h1> -->
-       
-      <hr>
-      <div class="columns">
-          <div class="column">
-              <h5 class="title is-6">Battery Level vs Time Graph</h5>
-              <div id="active_user_battery" class="chart"></div>
+      <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+        <div class="text-black ">
+          <div>
+              <h2>Network Information</h2>
+                <p>It shows the various information regarding network of User</p>            
+                <div class="network_table">
+                <table class="table table-hover">
+                  <thead class="black white-text">
+                    <tr>
+                      <th>UserHash</th>
+                      <th>Hostname</th>
+                      <th>IP Address</th>
+                    </tr>
+                  </thead> 
+                  <tbody>
+                    {% for tuples_d in info["networkInfo"] %}
+                    <tr>
+                      <td>{{ tuples_d[2] }}</td>
+                      <td>{{ tuples_d[0] }}</td>
+                      <td>{{ tuples_d[1] }}</td>
+                    </tr>
+                  {% endfor %}
+                   
+                  </tbody>
+                </table>
+              </div>
           </div>
-          <div class="column">
-              <h5 class="title is-6">Call State of User</h5>
-              <div id="location_based_user_battery" class="chart"></div>
-          </div>
-          
+        </div>
       </div>
+
+      <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+        <div class="text-black ">
+          <div>
+              
+              <h2>Wifi Information</h2>
+  <p>It shows the various wifi regarding network of User</p>            
+  <div class="wifi_table">  
+    <table class="table table-hover">
+      <thead class="black white-text">
+        <tr>
+          <th>UserHash</th>
+          <th>Link Speed</th>
+          <th>Access Point Count</th>
+          <th>BSSID</th>
+        </tr>
+      </thead>
+      <tbody>
+          
+       {% for use in info["wifi"] %}
+        <tr>
+          <td>{{ use[4] }}</td>
+          <td>{{ use[1] }}</td>
+          
+          <td>{{ use[2] }}</td>
+          <td>{{ use[0] }}</td>
+        </tr>
+      {% endfor %}
+       
+      </tbody>
+    </table>
   </div>
-</section>
+  
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+    </div>
+
 
 <script type="text/javascript">
 
@@ -156,65 +207,6 @@
 </script>
 
 
-<div class="container">
-  <h2>Network Information</h2>
-  <p>It shows the various information regarding network of User</p>            
-  <div class="network_table">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>UserHash</th>
-        <th>Hostname</th>
-        <th>IP Address</th>
-      </tr>
-    </thead> 
-    <tbody>
-      {% for tuples_d in info["networkInfo"] %}
-      <tr>
-        <td>{{ tuples_d[2] }}</td>
-        <td>{{ tuples_d[0] }}</td>
-        <td>{{ tuples_d[1] }}</td>
-      </tr>
-    {% endfor %}
-     
-    </tbody>
-  </table>
-</div>
-
-</div>
-
-<br><br><br><br>
-
-<div class="container">
-  <h2>Wifi Information</h2>
-  <p>It shows the various wifi regarding network of User</p>            
-  <div class="wifi_table">  
-    <table class="table">
-      <thead>
-        <tr>
-          <th>UserHash</th>
-          <th>Link_Speed</th>
-          <th>Access_Point_Count</th>
-          <th>BSSID</th>
-        </tr>
-      </thead>
-      <tbody>
-          
-       {% for use in info["wifi"] %}
-        <tr>
-          <td>{{ use[4] }}</td>
-          <td>{{ use[1] }}</td>
-          
-          <td>{{ use[2] }}</td>
-          <td>{{ use[0] }}</td>
-        </tr>
-      {% endfor %}
-       
-      </tbody>
-    </table>
-  </div>
-  
-</div>
 
 {% endblock %}
 

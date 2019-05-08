@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block content %}
+<br><br>
+
+
+
+<div class="jumbotron custom-file" style="margin-left: 8%;margin-right: 8%;width:30%;">
+        <div class="text-black text-center ">
+	
+	  <form action="{{ url_for('handle_data') }}" method=post enctype=multipart/form-data>
+		<div class="input-group">
+		  <div class="input-group-prepend">
+		    <input class="input-group-text" id="inputGroupFileAddon01" type ="submit"></input>
+		  </div>
+		  <div class="custom-file">
+		    <input type="file" class="custom-file-input" id="inputGroupFile01"
+		      aria-describedby="inputGroupFileAddon01" name = "file" multiple="true" autocomplete="off" >
+		    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+		  </div>
+		</div>
+	  </form>
+	
+	</div>
+</div>
+
+
+  <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+        <div class="text-black text-center ">
+          <div>
+     
+         <table class="table table-hover">
+            <thead class="thead" style="background-color:#33b5e5!important">
+         <tr> 
+             <th>Place </th>
+             <th>Latitude </th>
+             <th>Longitude </th>
+             <th>Radius </th>
+         </tr>
+        </thead>
+         {% for i in range(length) %} 
+        <tr class="table clickable-row" data-href="{{ url_for('clicked_row') }}" method = POST> 
+
+            <td class = place width=30%>{{ data[i][0] }} </td>
+            <td class = latitude width=30%>{{ data[i][1] }} </td>
+            <td class = longitude width=30%>{{ data[i][2] }} </td>
+            <td class = radius width=30%>{{ data[i][3] }} </td>
+        
+         </tr>
+        {% endfor %}
+        </table>
+    
+   </div>
+        </div>
+      </div>
+
+
+
+<div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+        <div class="text-black text-center ">
+         
+        {% for use in output %}
+		{% for elem in use %}
+            <button type="button" class="btn btn-info" onclick='window.location.href = "{{ url_for('navigate_to_user', user_hash=elem)}}";'>{{ elem }}</button>
+                
+            {% endfor %}
+	{% endfor %}
+   	</div>
+        </div>
+      
+ 
+<script>
+    jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+        var row = {};
+        var id = $(this).closest("tr").find('td.place').text();
+        // row[place] = $(this).closest("tr").find('td.place').text();
+        // row[latitude] = $(this).closest("tr").find('td.latitude').text();
+        // row [longitude] = $(this).closest("tr").find('td.longitude').text();
+        // row[radius] = $(this).closest("tr").find('td.radius').text();
+        var id1 = $(this).closest("tr").find('td.latitude').text();
+        var id2 = $(this).closest("tr").find('td.longitude').text();
+        var id3 = $(this).closest("tr").find('td.radius').text();
+
+        // data = {place: id, latitude: id1, logitude: id2,radius: id3}
+        data = [id,id1,id2,id3]
+        // alert(data['place']);
+        // alert($(this).data("href"));
+        // $.ajax({
+        //     type : "POST",
+        //     url : "{{ url_for('clicked_row') }}",
+        //     data:  {id3}, //{json_str: JSON.stringify(data)}, //
+        //     contentType: 'application/json;charset=UTF-8',
+        //     success: function(result) {
+        //         console.log(result);
+        //     }
+        // });
+
+        //  $.post("/clicked_row", {"data": id})
+        $.post("/clicked_row", {"mydata": data})
+          window.location = "/popular_locations";
+          // window.location = $(this).data("href");
+      });
+    });
+</script>
+
+
+
+{% endblock %}
