@@ -1,0 +1,147 @@
+create table schema1.battery (id integer,icon_small integer,invalid_charger integer,level integer,health integer,scale integer,priority CHAR(10),technology CHAR(10), charge_counter integer,max_charging_current integer,probe_transmit_mode integer,voltage integer,timestamp integer,temperature integer,max_charging_voltage integer,present CHAR(10),battery_low CHAR(10),plugged integer,seq status integer);
+
+BatteryProbe 
+--------------
+
+
+									    ('icon-small',
+                                                                              17303465),
+									    ('invalid_charger',
+                                                                              0),
+									    ('level',
+                                                                              100),
+                                                                             
+                                                                             ('health',
+                                                                              2),
+                                                                             ('scale',
+                                                                              100),
+                                                                             ('PRIORITY',
+                                                                              False),
+                                                                             ('technology',
+                                                                              'Li-ion'),
+                                                                             ('charge_counter',
+                                                                              10000),
+                                                                             ('max_charging_current',
+                                                                              5000000),
+                                                                             ('PROBE_TRANSMIT_MODE',
+                                                                              0),
+                                                                             ('voltage',
+                                                                              5000),
+                                                                             ('TIMESTAMP',
+                                                                              1551905960),
+                                                                             ('temperature',
+                                                                              250),
+                                                                             ('max_charging_voltage',
+                                                                              5000000),
+                                                                             ('present',
+                                                                              True),
+                                                                             ('battery_low',
+                                                                              False),
+                                                                             ('plugged',
+                                                                              1),
+                                                                             ('seq',
+                                                                              3),
+                                                                             ('status',
+                                                                              2)
+
+
+
+create table schema1.callstate (call_state CHAR(50),timestamp integer,probe_transmit_mode integer);
+create table public."callstate" (call_state TEXT,timestamp TEXT,probe_transmit_mode TEXT);
+
+CallStateProbe': [						 	       ('CALL_STATE',
+                                                                                'Idle'),
+                                                                               ('TIMESTAMP',
+                                                                                1551906021),
+                                                                               ('PROBE_TRANSMIT_MODE',
+                                                                                0)],
+
+
+
+
+create table schema1.datecalendar (day_of_year integer,month integer,dst_offset integer,day_of_month integer,week_of_month integer,probe_transmit_mode integer,day_of_week_in_month integer,week_of_year integer,hour_of_day integer,timestamp integer,minute integer,day_of_week integer);
+
+create table public."datecalendar" (day_of_year integer,month integer,dst_offset integer,day_of_month integer,week_of_month integer,probe_transmit_mode integer,day_of_week_in_month integer,week_of_year integer,hour_of_day integer,timestamp integer,minute integer,day_of_week integer);
+
+DateCalendarProbe': [							         ('DAY_OF_YEAR',
+                                                                                   66),
+                                                                                  ('MONTH',
+                                                                                   3),
+                                                                                  ('DST_OFFSET',
+                                                                                   0),
+                                                                                  ('DAY_OF_MONTH',
+                                                                                   7),
+                                                                                  ('WEEK_OF_MONTH',
+                                                                                   2),
+                                                                                  ('PROBE_TRANSMIT_MODE',
+                                                                                   0),
+                                                                                  ('DAY_OF_WEEK_IN_MONTH',
+                                                                                   1),
+                                                                                  ('WEEK_OF_YEAR',
+                                                                                   10),
+                                                                                  ('HOUR_OF_DAY',
+                                                                                   2),
+                                                                                  ('TIMESTAMP',
+                                                                                   1551905960),
+                                                                                  ('MINUTE',
+                                                                                   29),
+                                                                                  ('DAY_OF_WEEK',
+                                                                                   5)],
+
+
+
+
+
+create table schema1.network (interface_name CHAR(50), interface_display CHAR(10), hostname CHAR(100), timestamp integer, ip_address CHAR(100),probe_transmit_mode integer);
+
+INSERT INTO network (interface_name , interface_display , hostname , timestamp , ip_address ,probe_transmit_mode)
+('1553152142', '0', '192.168.232.2', 'wlan0', '192.168.232.2', 'wlan0')
+(timestamp ,probe_transmit_mode, hostname,interface_name , ip_address, interface_display)
+
+create table network (interface_name CHAR(50), interface_display CHAR(10), hostname CHAR(100), timestamp integer, ip_address CHAR(100),probe_transmit_mode integer);
+
+NetworkProbe': [							     ('INTERFACE_NAME',
+                                                                              'wlan0'),
+                                                                             ('INTERFACE_DISPLAY',
+                                                                              'wlan0'),
+                                                                             ('HOSTNAME',
+                                                                              '192.168.232.2'),
+                                                                             ('TIMESTAMP',
+                                                                              1551905960),
+                                                                             ('IP_ADDRESS',
+                                                                              '192.168.232.2'),
+                                                                             ('PROBE_TRANSMIT_MODE',
+                                                                              0)],
+
+
+
+
+
+
+
+
+create table schema1.wakelockinformation (bright_count integer,dim_locks integer, partial_count integer,timestamp integer, full_locks CHAR(50), bright_locks CHAR(50), partial_locks CHAR(50), dim_count integer, probe_transmit_mode integer , full_count integer);
+create table wakelockinformation (bright_count integer,dim_locks integer, partial_count integer,timestamp integer, full_locks CHAR(50), bright_locks CHAR(50), partial_locks CHAR(50), dim_count integer, probe_transmit_mode integer , full_count integer);
+
+WakeLockInformationProbe': [								('BRIGHT_COUNT',
+                                                                                          0),
+                                                                                         ('DIM_LOCKS',
+                                                                                          []),
+                                                                                         ('PARTIAL_COUNT',
+                                                                                          0),
+                                                                                         ('TIMESTAMP',
+                                                                                          1551905960),
+                                                                                         ('FULL_LOCKS',
+                                                                                          []),
+                                                                                         ('BRIGHT_LOCKS',
+                                                                                          []),
+                                                                                         ('PARTIAL_LOCKS',
+                                                                                          []),
+                                                                                         ('DIM_COUNT',
+                                                                                          0),
+                                                                                         ('PROBE_TRANSMIT_MODE',
+                                                                                          0),
+                                                                                         ('FULL_COUNT',
+                                                                                          0)]}
+
+

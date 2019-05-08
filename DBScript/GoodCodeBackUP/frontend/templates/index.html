@@ -1,0 +1,184 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    ._chart {
+        height: 800px;
+        width: 100%;
+    }
+</style>
+
+<body>        
+        <div class="columns">
+        <br><br>
+        <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+          <div class="text-black text-center ">
+            <div>
+                <div class="column">
+                    <h5 class="title is-6">Battery Level vs Time Graph</h5>
+                    <div id="battery" class="chart"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+          <div class="text-black text-center ">
+            <div>
+            <div class="column">
+                <h5 class="title is-6">Call State of User</h5>
+                <br><br>
+                <div id="call_state" class="_chart" style="margin-left: 8%;margin-right: 8%"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+          <div class="text-black text-center ">
+            <div>
+            <div class="column">
+                    <h5 class="title is-6">Network Speed of User</h5>
+                    <div id="network_speed" class="chart"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <div class="jumbotron" style="margin-left: 8%;margin-right: 8%">
+          <div class="text-black text-center ">
+            <div>
+            <div class="column">
+                <h5 class="title is-6">Location Tracking</h5>
+                <div id="gps" class="chart"></div>
+            </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    
+
+
+    <script type="text/javascript">
+    
+
+        function visulaization(){
+            $.post('{{ url_for("retrieve_user_data", user_hash=user_hash)}}', {
+            
+            }).done(function(response) {
+                
+                console.log(response)
+
+                //Start battery data processing
+                var battery_layout = {
+                    title: 'Battery Level',
+                    xaxis: {
+                      title: 'Time',
+                      showgrid: false,
+                      zeroline: false
+                    },
+                    yaxis: {
+                      title: 'Level',
+                      showline: false
+                    }
+                  };
+
+                var battery_data = {
+                  x: response['battery_timestamp'],
+                  y: response['battery_level']
+                };
+
+                var battery_data_list = [battery_data];
+
+                Plotly.newPlot('battery',battery_data_list,battery_layout);
+                //End battery data processing
+
+
+                //Start Call State data processing
+                var call_state_data = [{
+                  values: response['call_state_count_list'],
+                  labels: response['call_state_list'],
+                  type: 'pie'
+                }];
+
+                var call_state_layout = {
+                  height: 700,
+                  width: 1200
+                };
+
+                Plotly.newPlot('call_state', call_state_data, call_state_layout);
+                //End Call State data processing
+
+                //Start network speed data processing
+                var net_speed_layout = {
+                    title: 'Network Speed',
+                    xaxis: {
+                      title: 'Time',
+                      showgrid: false,
+                      zeroline: false
+                    },
+                    yaxis: {
+                      title: 'Speed',
+                      showline: false
+                    }
+                  };
+
+                var net_data = {
+                  x: response['net_speed_timestamp'],
+                  y: response['net_speed']
+                };
+
+                var net_data_list = [net_data];
+
+                Plotly.newPlot('network_speed',net_data_list,net_speed_layout);
+                //End network speed data processing
+
+                //Start gps data processing
+                var gps_data = [{
+                    type:'scattermapbox',
+                    lon:response['location_longitude'],
+                    lat:response['location_latitude'],
+                    mode:'markers',
+                    marker: {
+                        size:14
+                    },
+                }]
+
+                var gps_layout = {
+                autosize: true,
+                hovermode:'closest',
+                mapbox: {
+                    bearing:0,
+                    center: {
+                    lat:17.3850,
+                    lon:78.4867
+                    },
+                    pitch:0,
+                    zoom:11
+                },
+                }
+
+
+                Plotly.setPlotConfig({
+                    mapboxAccessToken: 'pk.eyJ1Ijoibml0aXNoMTIzIiwiYSI6ImNqdGtieXV0NjEyMmQ0NGxxNmo3c2M5bzcifQ.OBC2T25mrxqvbvrd5Hv-dg'
+                })
+                    
+                Plotly.newPlot('gps', gps_data, gps_layout);
+                //End gps data processing
+
+            }).fail(function() {
+                console.log("something went wrong with the request");
+            });
+        }
+
+        $(document).ready(function(){
+            setInterval("visulaization()", 15000);
+        });
+
+    </script>
+</body>
+{% endblock %}
+
+
+
+
