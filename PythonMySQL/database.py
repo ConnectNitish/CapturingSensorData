@@ -12,7 +12,7 @@ class Database:
         self.dbname = dbname
         self.user  = user
         self.password = pwd
-        self.conn = psycopg2.connect(host='127.0.0.1',database='python_mysql',user='postgres',password='qwerty')
+        self.conn = psycopg2.connect(host='127.0.0.1',database='python_mysql',user='postgres',password='------')
         self.my_cursor =  self.conn.cursor()
 
     def probe_info(self,userhash):
