@@ -1,5 +1,6 @@
 # CapturingSensorData
 
+DashBoard URL : http://dsac.msensui.iiit.ac.in/ 
 
 PythonMySQL ( description of Folder Structure ) :  
 
