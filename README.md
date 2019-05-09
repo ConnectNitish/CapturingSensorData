@@ -2,6 +2,10 @@
 
 DashBoard URL : http://dsac.msensui.iiit.ac.in/ 
 
+Final Project Report : ./Reports/PROJECT REPORT.pdf
+Purple Robot Report : ./Reports/User_Manual.pdf
+
+
 PythonMySQL ( description of Folder Structure ) :  
 
 ./PythonMySQL/frontend 
