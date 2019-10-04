@@ -24,6 +24,10 @@ DBScript: DataBase folder Script
 Resposible for having all the scripts required for the project.
 
 
+Apk File : 
+https://github.com/ConnectNitish/CapturingSensorData/blob/master/Purple%20Robot-debug.apk
+
+
 
 
 
